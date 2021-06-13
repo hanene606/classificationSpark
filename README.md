@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[39]:
+
 
 
 ######### this is a basic Machine Learning Model with python and spark on jupyter ###########
@@ -17,20 +17,18 @@
 import pyspark
 
 
-# In[40]:
+
 
 
 ###check the installed version of Spark
 print(pyspark.__version__)
 
 
-# In[41]:
 
 
 from pyspark.sql import SparkSession  ### a spark session 
 
 
-# In[42]:
 
 
 
@@ -38,14 +36,9 @@ spark = SparkSession     .builder     .appName('Covid Data') \   ##### name of a
     .getOrCreate()
 
 
-# In[43]:
 
-
-spark ###### get information from spark session
-
-
-# In[44]:
-
+###### get information from spark session
+spark
 
 ####Loading the data into Spark##
     #####b.csv
@@ -56,20 +49,18 @@ base = (spark.read
           .load("b.csv"))
 
 
-# In[46]:
+
 
 
 #### visualisation of 25 rows of the  base
 base.show(25)
 
 
-# In[52]:
-
 
 base.toPandas()  ### interact with Pandas easily
 
 
-# In[55]:
+
 
 
 # How many rows we have
@@ -79,14 +70,13 @@ base.count()
 base.columns
 
 
-# In[48]:
+
 
 
 ### Types of our columns
 base.dtypes
 
 
-# In[ ]:
 
 
 ####Building A Machine Learning Model With Spark ML#####
@@ -105,7 +95,6 @@ assembler = VectorAssembler(inputCols=required_features, outputCol='features')
 transformed_data = assembler.transform(base)
 
 
-# In[ ]:
 
 
 ###Before modeling let’s do the usual splitting between training and testing:
@@ -113,7 +102,7 @@ transformed_data = assembler.transform(base)
 (training_data, test_data) = transformed_data.randomSplit([0.8,0.2])
 
 
-# In[ ]:
+
 
 
 
@@ -126,7 +115,6 @@ rfcovid = RandomForestClassifier(labelCol='Covid',
                             maxDepth=5)
 
 
-# In[ ]:
 
 
 #####we fit the model with the train dataset
@@ -134,7 +122,6 @@ rfcovid = RandomForestClassifier(labelCol='Covid',
 model = rfcovid.fit(training_data)
 
 
-# In[ ]:
 
 
 ####This will give us something called a transformer. And finally, we predict using the test dataset:
@@ -142,7 +129,7 @@ model = rfcovid.fit(training_data)
 predictions = model.transform(test_data)
 
 
-# In[ ]:
+
 
 
 # Evaluate our model
@@ -154,7 +141,7 @@ evaluator = MulticlassClassificationEvaluator(
     metricName='accuracy')
 
 
-# In[ ]:
+
 
 
 #we to get the accuracy we do
@@ -162,11 +149,11 @@ accuracy = evaluator.evaluate(predictions)
 print('Test Accuracy = ', accuracy) 
 
 
-# In[ ]:
+
 
 
 #### before you go 
 spark.stop()  ## stoppin the spark session
 
 
-# In[ ]:
+
